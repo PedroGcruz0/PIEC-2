@@ -1,14 +1,18 @@
 const express = require('express');
+const cors = require('cors');
+const path = require('path');
+
 const app = express();
-const port = 3000;
+const porta = 3000;
 
-const exemploRoutes = require('./routes/exemploRoutes');
+app.use(cors());
 app.use(express.json());
-app.use('/api/exemplo', exemploRoutes);
 
-// Servir front-end
-app.use(express.static('public'));
+const rotaLogin = require('./routes/router');
+app.use('/api/login', rotaLogin);
 
-app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
+app.use(express.static(path.join(__dirname, '../public')));
+
+app.listen(porta, () => {
+  console.log(`Servidor rodando em http://localhost:${porta}`);
 });

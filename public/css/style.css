@@ -1,71 +1,71 @@
 body {
   font-family: Verdana, sans-serif;
   background-color: #f0f0f0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   margin: 0;
-  position: relative;
+  padding-top: 0;
 }
 
+/* Estiliza a logo */
 .logo {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 90px;
+  width: 100px;
   height: auto;
+  margin: 0;
 }
 
-.container {
+/* Container centralizado para o conteúdo */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 40px;
+  max-width: 1000px;
+  margin: 30px auto;
+  justify-content: flex-start;
+}
+
+/* Título principal */
+h1 {
+  font-family: 'Times New Roman', serif;
+  font-size: 32px;
+  color: #007bff;
+}
+
+/* Seção de introdução */
+.intro-section {
   background-color: white;
   padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 0 10px #000000;
-  width: 400px;
-  text-align: center;
-}
-
-h1 {
-  font-family: 'Times New Roman', serif;
-  font-size: 24px;
-  margin-bottom: 20px;
-  color:#007bff;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-input[type="text"],
-input[type="password"] {
-  width: 90%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 3px solid #007bff;
-  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
   font-size: 16px;
-  text-align: center;
+  line-height: 1.6;
+  color: #333;
 }
 
-button {
-  background-color: #007bff;
-  color: #000000;
-  border: none;
-  margin-bottom: 5px;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-.message {
-  margin-top: 10px;
+/* Links de navegação ativos */
+.navbar .nav-link.active {
   font-weight: bold;
+}
+
+/* Dropdown ao passar o mouse */
+.navbar .dropdown-menu a:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Responsivo para telas menores */
+@media (max-width: 768px) {
+  .intro-section {
+    padding: 20px;
+    font-size: 15px;
+  }
+
+  .logo {
+    width: 80px;
+  }
+
+  h1 {
+    font-size: 26px;
+  }
 }
