@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Indeterminações</title>
+    <style>
+        /* --- ESTILO GERAL E CORES ATUALIZADAS --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #EBF8FF; /* Fundo azul bem claro */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #chat-container {
+            width: 90%;
+            max-width: 600px;
+            height: 85vh;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        #chat-header {
+            background: linear-gradient(135deg, #3182CE, #2B6CB0); /* Gradiente azul escuro */
+            color: white;
+            padding: 15px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #chat-header h2 {
+            margin: 0;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        #chat-box {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Espaçamento entre mensagens */
+        }
+        .message {
+            display: flex;
+            max-width: 80%;
+        }
+        
+        /* --- ESTILOS DAS MENSAGENS DO USUÁRIO --- */
+        .user-message {
+            align-self: flex-end;
+            justify-content: flex-end;
+        }
+        .user-message .bubble {
+            background-color: #3182CE; /* Azul principal */
+            color: white;
+            border-radius: 18px;
+            border-bottom-right-radius: 4px;
+            padding: 10px 15px;
+        }
+
+        /* --- ESTILOS DAS MENSAGENS DO BOT (COM ÍCONE) --- */
+        .bot-message {
+            align-self: flex-start;
+            align-items: flex-end; /* Alinha o ícone com a base do balão */
+            gap: 10px;
+        }
+        .bot-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #E2E8F0;
+        }
+        .bot-message .bubble {
+            background-color: #E2E8F0; /* Cinza azulado claro */
+            color: #2D3748; /* Cinza escuro */
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            padding: 10px 15px;
+        }
+        .bubble ul {
+            padding-left: 20px;
+            margin: 8px 0 0 0;
+        }
+         .bubble strong {
+            color: #2B6CB0; /* Azul escuro para destaque */
+        }
+
+        /* --- ÁREA DE INPUT --- */
+        #input-area {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #E2E8F0;
+        }
+        #user-input {
+            flex-grow: 1;
+            border: 1px solid #CBD5E0;
+            border-radius: 20px;
+            padding: 10px 18px;
+            font-size: 1em;
+        }
+        #user-input:focus {
+            outline: none;
+            border-color: #3182CE;
+            box-shadow: 0 0 0 2px #BEE3F8;
+        }
+        #send-btn {
+            background-color: #3182CE; /* Azul principal */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            margin-left: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        #send-btn:hover {
+            background-color: #2B6CB0; /* Azul mais escuro no hover */
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-header">
+            <h2>Assistente dos Limites</h2>
+        </div>
+        <div id="chat-box" aria-live="polite">
+            <div class="message bot-message">
+                <img src="/static/img_logo.png" alt="Bot Avatar" class="bot-avatar">
+                <div class="bubble">
+                    Olá! 👋 Sou o assistente de Limites. <br>
+                    Digite um limite para eu analisar no formato: <strong>(função) x->ponto</strong>
+                </div>
+            </div>
+        </div>
+        <div id="input-area">
+            <input type="text" id="user-input" placeholder="Digite seu limite aqui..." autocomplete="off">
+            <button id="send-btn" aria-label="Enviar mensagem">➤</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // Enviar com o botão ou com a tecla Enter
+        sendBtn.addEventListener('click', handleSendMessage);
+        userInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                handleSendMessage();
+            }
+        });
+
+        function appendMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+
+            if (sender === 'user') {
+                messageDiv.classList.add('user-message');
+                messageDiv.innerHTML = `<div class="bubble">${text}</div>`;
+            } else { // sender === 'bot'
+                messageDiv.classList.add('bot-message');
+                messageDiv.innerHTML = `
+                    <img src="/static/img_logo.png" alt="Bot Avatar" class="bot-avatar">
+                    <div class="bubble">${text}</div>
+                `;
+            }
+            
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return messageDiv;
+        }
+
+        async function handleSendMessage() {
+            const userText = userInput.value.trim();
+            if (userText === '') return;
+
+            // Exibir a mensagem do usuário
+            appendMessage(userText, 'user');
+            userInput.value = '';
+            userInput.focus();
+
+            // Mostrar "digitando..." do bot
+            const thinkingMessage = appendMessage('Analisando...', 'bot');
+            
+            try {
+                const response = await fetch('/calcular', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ funcao: userText })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro do servidor: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                let botResponseHTML = `<p>${data.tipo}</p>`;
+                if (data.metodos && data.metodos.length > 0) {
+                    botResponseHTML += "<p>Métodos comuns para resolver:</p>";
+                    botResponseHTML += "<ul>";
+                    data.metodos.forEach(metodo => {
+                        botResponseHTML += `<li>${metodo}</li>`;
+                    });
+                    botResponseHTML += "</ul>";
+                }
+                
+                // Atualizar a mensagem "Analisando..." com a resposta final
+                thinkingMessage.querySelector('.bubble').innerHTML = botResponseHTML;
+
+            } catch (error) {
+                console.error('Erro:', error);
+                thinkingMessage.querySelector('.bubble').textContent = 'Desculpe, ocorreu um erro. Verifique o formato do seu limite e tente novamente.';
+            }
+
+            // Rolar para a última mensagem
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
