@@ -12,7 +12,7 @@ document.getElementById("form-login").addEventListener("submit", async function 
     });
 
     if (resposta.ok) {
-      window.location.href = "/ex1.html"; // Muda para a página correta após login
+      window.location.href = "telaInicial.html"; // Muda para a página correta após login
     } else {
       document.getElementById("mensagem-erro").textContent = "Usuário ou senha inválidos";
     }

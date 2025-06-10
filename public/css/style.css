@@ -1,9 +1,72 @@
 body {
   font-family: Verdana, sans-serif;
-  background-color: #f0f0f0;
+  background: linear-gradient(to right, #667eea, #ffffff);
   margin: 0;
   padding-top: 0;
 }
+
+/* Logo */
+.logo-inicial {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 100px;
+  height: auto;
+  border: 2px solid black;
+  border-radius: 10px;
+  z-index: 1000;
+}
+
+/* Botão sair no canto superior direito */
+.btn-sair {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-sair:hover {
+  background-color: #c82333;
+}
+
+/* Conteúdo central com botão Assistente */
+.conteudo-central {
+  margin-top: 150px;
+  text-align: center;
+}
+
+.botoes-grade {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.btn-grade {
+  padding: 16px 0;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+  width: 100%;
+}
+
+.btn-grade:hover {
+  background-color: #0056b3;
+}
+
+
 
 /* Estiliza a logo */
 .logo {
@@ -27,7 +90,9 @@ body {
 h1 {
   font-family: 'Times New Roman', serif;
   font-size: 32px;
-  color: #007bff;
+  color: black;
+  text-shadow: white;
+  
 }
 
 /* Seção de introdução */
@@ -68,4 +133,5 @@ h1 {
   h1 {
     font-size: 26px;
   }
+  
 }
